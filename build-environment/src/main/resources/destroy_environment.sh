@@ -74,7 +74,6 @@ confluent kafka cluster delete "$KAFKA_CLUSTER_ID" --environment "$ENVIRONMENT_I
 
 ### I find the Schema Registry cluster ###
 printf 'Find Schema Registry Cluster of ENVIRONMENT %s\n' "$ENVIRONMENT_ID"
-confluent schema-registry cluster describe --environment "$ENVIRONMENT_ID" -o json | jq -r ".cluster_id"
 echo "confluent schema-registry cluster describe --environment $ENVIRONMENT_ID -o json | jq -r .cluster_id"
 SCHEMA_REGISTRY_ID=$(confluent schema-registry cluster describe --environment "$ENVIRONMENT_ID" -o json | jq -r ".cluster_id")
 if [ ! "$SCHEMA_REGISTRY_ID" ]; then
