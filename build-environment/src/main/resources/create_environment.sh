@@ -26,8 +26,10 @@ fi
 
 SCHEMA_REGISTRY_ID=$(echo "$OUTPUT" | jq -r ".id")
 
+echo "$OUTPUT" | jq -r 'to_entries[]|"\(.key)=\(.value)"' > schema_registry_values.properties
+
 ### I store the API key and secret into a properties file that I used to populate the maven settings needed to interact with Schema Registry ###
-confluent api-key create --resource "$SCHEMA_REGISTRY_ID" --description "Schema Registry credentials" --output json | jq -r 'to_entries[]|"\(.key)=\(.value)"' > schema_registry_api_key_secret.properties
+confluent api-key create --resource "$SCHEMA_REGISTRY_ID" --description "Schema Registry credentials" --output json | jq -r 'to_entries[]|"\(.key)=\(.value)"' >> schema_registry_values.properties
 
 ### I create the Kafka cluster needed for my examples ###
 KAFKA_CLUSTER_NAME="Schema-Registry-Cluster"
