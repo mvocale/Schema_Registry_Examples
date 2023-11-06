@@ -28,10 +28,7 @@ You can also inspect the structure of the schema clicking on the subject name:
 
 ## Destroy environment
 In order to contain your cost you should remove all the built resources at the end of your test.
-You can easily do it running the command:
 
-```
-$ cd ../../build-environment/src/main/resources/
-$ ./destroy_environment.sh 
-```
+You can easily do it running the script _destroy_environment.sh_ provided into the root project _build-environment_.
+
 In this way all the resources created previously will be removed from Confluent Cloud
