@@ -5,6 +5,15 @@ If you already have a Confluent Cloud environment with all the resources needed 
 
 Otherwise you can use the scripts provided in the folder _build-environment_ that will create all needed for you.
 
+## System requirements
+In order to execute the examples implemented in this repository you need to have the following elements:
+
+ - A Confluent Cloud account;
+ - Confluent CLI (You can download and install the latest version [here](https://cnfl.io/cli));
+ - Apache Maven 3.9.1 or later;
+ - jq 1.7 or later;
+ - OpenJDK 17.0.6 or later (I didn't test the examples on Java 21);
+
 ## Create environment
 Before doing it you need to have installed the Confluent CLI and have credentials to access the Confluent Cloud.
 Then, to build your Confluent Cloud environment, you simply need to set into the _build-environment_ folder and launch the command:

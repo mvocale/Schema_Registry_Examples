@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.confluent.developer.schema_registry.examples</groupId>
+    <artifactId>schema-registry-examples</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+    <name>parent</name>
+
+    <modules>
+        <module>protobuf/simple-registration</module>
+        <module>avro/simple-registration</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <confluent.schema.registry.version>7.5.1</confluent.schema.registry.version>
+        <properties.maven.plugin.version>1.2.1</properties.maven.plugin.version>
+    </properties>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>
