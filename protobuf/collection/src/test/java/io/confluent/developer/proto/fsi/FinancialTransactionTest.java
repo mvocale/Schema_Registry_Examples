@@ -38,7 +38,7 @@ public class FinancialTransactionTest {
 
         // Serialize and deserialize the message
         byte[] serializedMessage = transaction.toByteArray();
-        FinancialTransaction deserializedTransaction = null;
+        FinancialTransaction deserializedTransaction;
         try {
             deserializedTransaction = FinancialTransaction.parseFrom(serializedMessage);
         } catch (InvalidProtocolBufferException e) {
