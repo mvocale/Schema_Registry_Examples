@@ -10,6 +10,7 @@
 
     <modules>
         <module>protobuf/simple-registration</module>
+        <module>protobuf/collection</module>
         <module>avro/simple-registration</module>
     </modules>
 
