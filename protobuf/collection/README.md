@@ -1,4 +1,4 @@
-# Protobuf Collection schema registration
+# Protobuf Collection Example
 This is an example where you read Protobuf schema from the local file system, validate and register it on the target Schema Registry server.
 This approach can be used in a continuous deployment pipeline to push schemas to a new environment.
 This example contains an FSI transaction record example with a Collection attribute.
