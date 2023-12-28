@@ -120,6 +120,7 @@ public class FinancialTransactionTest {
         propsConsumer.put(SaslConfigs.SASL_JAAS_CONFIG, producerSaslJaasConfig);
         propsConsumer.put("security.protocol", "SASL_SSL");
 
+        // Create the topic needed for the test
         FinancialTransaction readFinancialTransaction = null;
         try (KafkaConsumer<String, FinancialTransaction> consumer = new KafkaConsumer<>(propsConsumer)) {
             consumer.subscribe(Collections.singletonList(TOPIC));

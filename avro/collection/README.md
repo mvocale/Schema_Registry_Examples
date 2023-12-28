@@ -14,14 +14,14 @@ In case you already have a Confluent Cloud cluster please set the values of the 
 - _${api_secret}_
 
 ## Run the example
-To run the example, validate the Protobuf schema before registering it into the Schema registry launch the command:
+To run the example, validate the Avro schema before registering it into the Schema registry launch the command:
 
 ```
 $  mvn compile schema-registry:validate  
 ```
-The maven plugin will validate the FinancialTransaction.proto.
+The maven plugin will validate the FinancialTransaction.avsc.
 
-After that you are able to register the Protobuf schema into the Schema registry executing the command:
+After that you are able to register the Avro schema into the Schema registry executing the command:
 
 ```
 $  mvn compile schema-registry:register  
