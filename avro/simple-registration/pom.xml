@@ -41,7 +41,7 @@
                     </schemaRegistryUrls>
                     <userInfoConfig>${api_key}:${api_secret}</userInfoConfig>
                     <subjects>
-                        <FinancialTransaction_avro>src/main/resources/FinancialTransaction.avsc</FinancialTransaction_avro>
+                        <transactions-avro-value>src/main/resources/FinancialTransaction.avsc</transactions-avro-value>
                     </subjects>
                     <schemaTypes>
                         <FinancialTransaction_avro>AVRO</FinancialTransaction_avro>
