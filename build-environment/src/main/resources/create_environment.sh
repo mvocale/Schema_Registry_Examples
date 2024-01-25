@@ -42,10 +42,11 @@ fi
   echo "$OUTPUT" | jq .
 
 KAFKA_CLUSTER_ID=$(echo "$OUTPUT" | jq -r ".id")
+echo "$OUTPUT" | jq -r 'to_entries[]|"\(.key)=\(.value)"' > kafka_cluster_values.properties
 confluent kafka cluster use "$KAFKA_CLUSTER_ID"
 
 ### I store the API key and secret into a properties file that I used to populate the maven settings needed to interact with Kafka Cluster  ###
-confluent api-key create --resource "$KAFKA_CLUSTER_ID" --description "Schema Registry Kafka Cluster credentials" --output json | jq -r 'to_entries[]|"\(.key)=\(.value)"' > kafka_cluster_api_key_secret.properties
+confluent api-key create --resource "$KAFKA_CLUSTER_ID" --description "Schema Registry Kafka Cluster credentials" --output json | jq -r 'to_entries[]|"\(.key)=\(.value)"' >> kafka_cluster_values.properties
 
 ### I create the service account needed for ksqlDB ###
 SERVICE_ACCOUNT_NAME="Schema-Registry-Service-Account"

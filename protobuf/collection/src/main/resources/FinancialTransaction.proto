@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package io.confluent.developer.proto.fsi;
+option java_outer_classname = "FinancialTransactionProto";
 
 message FinancialTransaction {
   // Unique transaction identifier
@@ -17,5 +18,8 @@ message FinancialTransaction {
 
   // Currency code (e.g., 'USD', 'EUR', 'GBP')
   string currency = 5;
+
+  // Optional: List of tax amounts associated with the transaction
+  repeated double tax_amounts = 6;
 
 }

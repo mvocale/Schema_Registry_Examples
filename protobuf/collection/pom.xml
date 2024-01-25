@@ -8,14 +8,32 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <artifactId>simple-protobuf-registration</artifactId>
+    <artifactId>protobuf-collection</artifactId>
     <version>1.0</version>
+
+    <properties>
+        <junit_version>5.10.1</junit_version>
+        <protoc_jar_maven_plugin>3.11.4</protoc_jar_maven_plugin>
+        <kafka_protobuf_serializer_version>7.5.1</kafka_protobuf_serializer_version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>${protobuf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit_version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-protobuf-serializer</artifactId>
+            <version>${kafka_protobuf_serializer_version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -34,6 +52,27 @@
                             <files>
                                 <file>../../build-environment/src/main/resources/schema_registry_values.properties</file>
                             </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.os72</groupId>
+                <artifactId>protoc-jar-maven-plugin</artifactId>
+                <version>${protoc_jar_maven_plugin}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <optimizeCodegen>false</optimizeCodegen>
+                            <protocVersion>${protobuf.version}</protocVersion>
+                            <includeStdTypes>true</includeStdTypes>
+                            <inputDirectories>
+                                <include>src/main/resources</include>
+                            </inputDirectories>
                         </configuration>
                     </execution>
                 </executions>
