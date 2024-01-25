@@ -48,15 +48,12 @@
                     </schemaRegistryUrls>
                     <userInfoConfig>${api_key}:${api_secret}</userInfoConfig>
                     <subjects>
-                        <FinancialTransaction_proto>src/main/resources/FinancialTransaction.proto</FinancialTransaction_proto>
+                        <transactions-protobuf-value>src/main/resources/FinancialTransaction.proto</transactions-protobuf-value>
                     </subjects>
                     <schemaTypes>
-                        <FinancialTransaction_proto>PROTOBUF</FinancialTransaction_proto>
+                        <transactions-protobuf-value>PROTOBUF</transactions-protobuf-value>
                     </schemaTypes>
                 </configuration>
-                <goals>
-                    <goal>register</goal>
-                </goals>
             </plugin>
         </plugins>
     </build>

@@ -14,6 +14,7 @@
     <properties>
         <junit_version>5.10.1</junit_version>
         <protoc_jar_maven_plugin>3.11.4</protoc_jar_maven_plugin>
+        <kafka_protobuf_serializer_version>7.5.1</kafka_protobuf_serializer_version>
     </properties>
 
     <dependencies>
@@ -27,6 +28,12 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit_version}</version>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-protobuf-serializer</artifactId>
+            <version>${kafka_protobuf_serializer_version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -80,10 +87,10 @@
                     </schemaRegistryUrls>
                     <userInfoConfig>${api_key}:${api_secret}</userInfoConfig>
                     <subjects>
-                        <FinancialTransaction_proto>src/main/resources/FinancialTransaction.proto</FinancialTransaction_proto>
+                        <transactions-protobuf-value>src/main/resources/FinancialTransaction.proto</transactions-protobuf-value>
                     </subjects>
                     <schemaTypes>
-                        <FinancialTransaction_proto>PROTOBUF</FinancialTransaction_proto>
+                        <transactions-protobuf-value>PROTOBUF</transactions-protobuf-value>
                     </schemaTypes>
                 </configuration>
             </plugin>
