@@ -13,6 +13,7 @@
         <module>protobuf/collection</module>
         <module>avro/simple-registration</module>
         <module>avro/collection</module>
+        <module>avro/enumeration</module>
     </modules>
 
     <properties>
@@ -20,9 +21,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <systemPath>${java.home}/jmods</systemPath>
         <confluent.schema.registry.version>7.5.1</confluent.schema.registry.version>
         <properties.maven.plugin.version>1.2.1</properties.maven.plugin.version>
         <protobuf.version>3.23.0</protobuf.version>
+        <junit_version>5.10.1</junit_version>
+        <avro_version>1.11.3</avro_version>
+        <slf4j_simple_version>2.0.11</slf4j_simple_version>
+        <kafka_schema_registry_client_version>7.5.3</kafka_schema_registry_client_version>
     </properties>
 
     <pluginRepositories>

@@ -19,10 +19,9 @@ import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.errors.TopicExistsException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -95,7 +94,9 @@ public class FinancialTransactionTest {
         final FinancialTransaction writeFinancialTransaction;
         try (KafkaProducer<String, FinancialTransaction> producer = new KafkaProducer<>(propsProducer)) {
             long transactionTime = Instant.now().toEpochMilli();
-            writeFinancialTransaction = new FinancialTransaction(UUID.randomUUID().toString(), transactionTime, "deposit", generateRandomCurrencyValues(), "USD", Arrays.asList(2.50d, 3.50d, 4.50d));
+            writeFinancialTransaction = new FinancialTransaction(UUID.randomUUID().toString(), transactionTime, "deposit",
+                    generateRandomCurrencyValues(), "USD", Arrays.asList(2.50d, 3.50d, 4.50d),
+                    getRandomValueTransactionStatus());
             final ProducerRecord<String, FinancialTransaction> record = new ProducerRecord<>(TOPIC, writeFinancialTransaction.getTransactionId().toString(), writeFinancialTransaction);
             try {
                 RecordMetadata metadata = producer.send(record).get();
@@ -145,6 +146,7 @@ public class FinancialTransactionTest {
         assertEquals(readFinancialTransaction.getAmount(), writeFinancialTransaction.getAmount());
         assertEquals(readFinancialTransaction.getCurrency().toString(), writeFinancialTransaction.getCurrency());
         assertEquals(Objects.requireNonNull(readFinancialTransaction).getTaxAmounts().size(), writeFinancialTransaction.getTaxAmounts().size());
+        assertEquals(readFinancialTransaction.getTransactionStatus(), writeFinancialTransaction.getTransactionStatus());
 
     }
 
@@ -158,5 +160,17 @@ public class FinancialTransactionTest {
         Random random = new Random();
         double randomValue = 1 + (100 - 1) * random.nextDouble();
         return Math.rint(randomValue * currency.getDefaultFractionDigits());
+    }
+
+    /**
+     * Generates a random {@link TransactionStatus} value.
+     *
+     * @return A random {@link TransactionStatus} value.
+     */
+    private TransactionStatus getRandomValueTransactionStatus() {
+        EnumSet<TransactionStatus> values = EnumSet.allOf(TransactionStatus.class);
+        List<TransactionStatus> shuffledValues = new ArrayList<>(values);
+        Collections.shuffle(shuffledValues);
+        return values.iterator().next();
     }
 }

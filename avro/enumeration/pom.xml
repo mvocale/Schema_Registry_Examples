@@ -8,7 +8,7 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <artifactId>avro-collection</artifactId>
+    <artifactId>avro-enumeration</artifactId>
     <version>1.0</version>
 
     <dependencies>
