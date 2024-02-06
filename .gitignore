@@ -3,3 +3,16 @@
 .idea/Schema_Registry_Examples.iml
 .idea/vcs.xml
 /qodana.yaml
+protobuf/enumeration/target/classes/io/confluent/developer/proto/fsi/enumeration/FinancialTransactionProto$FinancialTransaction$Builder.class
+protobuf/enumeration/target/classes/io/confluent/developer/proto/fsi/enumeration/FinancialTransactionProto$FinancialTransaction$TransactionStatus$1.class
+protobuf/enumeration/target/classes/io/confluent/developer/proto/fsi/enumeration/FinancialTransactionProto$FinancialTransaction$TransactionStatus.class
+protobuf/enumeration/target/classes/io/confluent/developer/proto/fsi/enumeration/FinancialTransactionProto$FinancialTransaction.class
+protobuf/enumeration/target/classes/io/confluent/developer/proto/fsi/enumeration/FinancialTransactionProto$FinancialTransactionOrBuilder.class
+protobuf/enumeration/target/classes/io/confluent/developer/proto/fsi/enumeration/FinancialTransactionProto.class
+protobuf/enumeration/target/generated-sources/io/confluent/developer/proto/fsi/enumeration/FinancialTransactionProto.java
+protobuf/enumeration/target/surefire-reports/io.confluent.developer.proto.fsi.FinancialTransactionTest.txt
+protobuf/enumeration/target/surefire-reports/TEST-io.confluent.developer.proto.fsi.FinancialTransactionTest.xml
+protobuf/enumeration/target/test-classes/surefire-reports/io.confluent.developer.proto.fsi.FinancialTransactionTest.txt
+protobuf/enumeration/target/test-classes/surefire-reports/TEST-io.confluent.developer.proto.fsi.FinancialTransactionTest.xml
+protobuf/enumeration/target/test-classes/test-classes/surefire-reports/io.confluent.developer.proto.fsi.FinancialTransactionTest.txt
+protobuf/enumeration/target/test-classes/test-classes/surefire-reports/TEST-io.confluent.developer.proto.fsi.FinancialTransactionTest.xml
