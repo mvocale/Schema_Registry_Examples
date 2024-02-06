@@ -8,14 +8,14 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <artifactId>protobuf-collection</artifactId>
+    <artifactId>avro-enumeration</artifactId>
     <version>1.0</version>
 
     <dependencies>
         <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>${protobuf.version}</version>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>${avro_version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -23,11 +23,33 @@
             <version>${junit_version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer -->
+        <!-- SLF4J API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j_simple_version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- SLF4J Log4j Implementation -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-reload4j</artifactId>
+            <version>${slf4j_simple_version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-schema-registry-client -->
         <dependency>
             <groupId>io.confluent</groupId>
-            <artifactId>kafka-protobuf-serializer</artifactId>
-            <version>${kafka_protobuf_serializer_version}</version>
+            <artifactId>kafka-schema-registry-client</artifactId>
+            <version>${kafka_schema_registry_client_version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>${kafka_schema_registry_client_version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
@@ -51,42 +73,20 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.github.os72</groupId>
-                <artifactId>protoc-jar-maven-plugin</artifactId>
-                <version>${protoc_jar_maven_plugin}</version>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro_version}</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>schema</goal>
+                            <goal>protocol</goal>
+                            <goal>idl-protocol</goal>
                         </goals>
                         <configuration>
-                            <optimizeCodegen>false</optimizeCodegen>
-                            <protocVersion>${protobuf.version}</protocVersion>
-                            <includeStdTypes>true</includeStdTypes>
-                            <inputDirectories>
-                                <include>src/main/resources</include>
-                            </inputDirectories>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Using generated sources in your project -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${build_helper_maven_plugin_version}</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/java/</source>
-                            </sources>
+                            <sourceDirectory>${project.basedir}/src/main/resources</sourceDirectory>
+                            <fieldVisibility>private</fieldVisibility>
                         </configuration>
                     </execution>
                 </executions>
@@ -94,19 +94,22 @@
             <plugin>
                 <groupId>io.confluent</groupId>
                 <artifactId>kafka-schema-registry-maven-plugin</artifactId>
-                <version>${confluent.schema.registry.version}</version> <!-- Replace with the desired version -->
+                <version>${confluent.schema.registry.version}</version>
                 <configuration>
                     <schemaRegistryUrls>
                         <param>${endpoint_url}</param>
                     </schemaRegistryUrls>
                     <userInfoConfig>${api_key}:${api_secret}</userInfoConfig>
                     <subjects>
-                        <transactions-protobuf-value>src/main/resources/FinancialTransaction.proto</transactions-protobuf-value>
+                        <transactions-avro-value>src/main/resources/FinancialTransaction.avsc</transactions-avro-value>
                     </subjects>
                     <schemaTypes>
-                        <transactions-protobuf-value>PROTOBUF</transactions-protobuf-value>
+                        <FinancialTransaction_avro>AVRO</FinancialTransaction_avro>
                     </schemaTypes>
                 </configuration>
+                <goals>
+                    <goal>register</goal>
+                </goals>
             </plugin>
         </plugins>
     </build>

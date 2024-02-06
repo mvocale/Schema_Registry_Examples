@@ -8,7 +8,7 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <artifactId>protobuf-collection</artifactId>
+    <artifactId>protobuf-enumeration</artifactId>
     <version>1.0</version>
 
     <dependencies>
@@ -28,6 +28,18 @@
             <groupId>io.confluent</groupId>
             <artifactId>kafka-protobuf-serializer</artifactId>
             <version>${kafka_protobuf_serializer_version}</version>
+        </dependency>
+        <!-- SLF4J API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j_simple_version}</version>
+        </dependency>
+        <!-- SLF4J Log4j Implementation -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-reload4j</artifactId>
+            <version>${slf4j_simple_version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -106,6 +118,7 @@
                     <schemaTypes>
                         <transactions-protobuf-value>PROTOBUF</transactions-protobuf-value>
                     </schemaTypes>
+                    <normalizeSchemas>true</normalizeSchemas>
                 </configuration>
             </plugin>
         </plugins>

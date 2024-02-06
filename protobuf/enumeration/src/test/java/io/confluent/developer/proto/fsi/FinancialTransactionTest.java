@@ -1,10 +1,11 @@
-package io.confluent.developer.avro.fsi;
+package io.confluent.developer.proto.fsi;
 
 
+import io.confluent.developer.proto.fsi.enumeration.FinancialTransactionProto.FinancialTransaction;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
-import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -23,6 +24,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -35,15 +37,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FinancialTransactionTest {
 
-    private static final String TOPIC = "transactions-avro";
+    private static final String TOPIC = "transactions-protobuf";
 
-    /**
-     * Tests the creation of a financial transaction with tax amounts related to a preloaded schema.
-     *
-     * @throws IOException if there is an I/O error while loading properties
-     */
     @Test
-    public void testCreateTransactionWithTaxAmounts() throws IOException {
+    public void testCreateTransaction() throws IOException {
 
         // Initialize Log4j logging
         BasicConfigurator.configure();
@@ -63,7 +60,7 @@ public class FinancialTransactionTest {
 
         Properties propsProducer = new Properties();
         propsProducer.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        propsProducer.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+        propsProducer.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaProtobufSerializer.class);
         propsProducer.put(ProducerConfig.ACKS_CONFIG, "all");
         propsProducer.put(ProducerConfig.RETRIES_CONFIG, 0);
 
@@ -82,12 +79,12 @@ public class FinancialTransactionTest {
         try (AdminClient adminClient = AdminClient.create(propsProducer)) {
             NewTopic newTopic = new NewTopic(TOPIC, 3, (short) 3);
             adminClient.createTopics(Collections.singleton(newTopic)).all().get();
-            Logger.getRootLogger().info("Topic created successfully");
+            System.out.println("Topic created successfully");
         } catch (InterruptedException | ExecutionException e) {
             if (e.getCause() instanceof TopicExistsException) {
-                Logger.getRootLogger().warn("Topic already exists");
+                System.out.println("Topic already exists");
             } else {
-                Logger.getRootLogger().error("Error creating topic");
+                System.out.println("Error creating topic");
                 throw new RuntimeException(e);
             }
         }
@@ -95,11 +92,20 @@ public class FinancialTransactionTest {
         final FinancialTransaction writeFinancialTransaction;
         try (KafkaProducer<String, FinancialTransaction> producer = new KafkaProducer<>(propsProducer)) {
             long transactionTime = Instant.now().toEpochMilli();
-            writeFinancialTransaction = new FinancialTransaction(UUID.randomUUID().toString(), transactionTime, "deposit", generateRandomCurrencyValues(), "USD", Arrays.asList(2.50d, 3.50d, 4.50d));
-            final ProducerRecord<String, FinancialTransaction> record = new ProducerRecord<>(TOPIC, writeFinancialTransaction.getTransactionId().toString(), writeFinancialTransaction);
+            writeFinancialTransaction =
+                    FinancialTransaction.newBuilder().setTransactionId(UUID.randomUUID().toString())
+                            .setTimestamp(transactionTime).setTransactionType("deposit")
+                            .setAmount(generateRandomCurrencyValues())
+                            .setCurrency("USD")
+                            .addAllTaxAmounts(Arrays.asList(2.50d, 3.50d, 4.50d))
+                            .setTransactionStatus(FinancialTransaction.TransactionStatus.APPROVED)
+                            .build();
+
+            final ProducerRecord<String, FinancialTransaction> record = new ProducerRecord<>(TOPIC, writeFinancialTransaction.getTransactionId(), writeFinancialTransaction);
+            System.out.println("Record: " + record);
             try {
                 RecordMetadata metadata = producer.send(record).get();
-                Logger.getRootLogger().info("Message sent to partition " + metadata.partition() + " offset " + metadata.offset());
+                System.out.printf("Message sent to partition %d, offset %d\n", metadata.partition(), metadata.offset());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -108,12 +114,12 @@ public class FinancialTransactionTest {
 
         Properties propsConsumer = new Properties();
         propsConsumer.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        propsConsumer.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
-        propsConsumer.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
+        propsConsumer.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaProtobufDeserializer.class);
         propsConsumer.put(ConsumerConfig.GROUP_ID_CONFIG, "test-financial-transactions");
         propsConsumer.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
         propsConsumer.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
         propsConsumer.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        propsConsumer.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, FinancialTransaction.class);
 
 
         // Confluent Schema Registry for Java
@@ -135,17 +141,17 @@ public class FinancialTransactionTest {
             final ConsumerRecords<String, FinancialTransaction> records = consumer.poll(Duration.ofMillis(1000));
             for (ConsumerRecord<String, FinancialTransaction> record : records) {
                 readFinancialTransaction = record.value();
-                Logger.getRootLogger().info("Message read " + readFinancialTransaction);
+                System.out.printf("Message read %s ", readFinancialTransaction);
             }
         }
 
-        assertEquals(Objects.requireNonNull(readFinancialTransaction).getTransactionId().toString(), writeFinancialTransaction.getTransactionId());
+        assertEquals(Objects.requireNonNull(readFinancialTransaction).getTransactionId(), writeFinancialTransaction.getTransactionId());
         assertEquals(readFinancialTransaction.getTimestamp(), writeFinancialTransaction.getTimestamp());
-        assertEquals(readFinancialTransaction.getTransactionType().toString(), writeFinancialTransaction.getTransactionType());
+        assertEquals(readFinancialTransaction.getTransactionType(), writeFinancialTransaction.getTransactionType());
         assertEquals(readFinancialTransaction.getAmount(), writeFinancialTransaction.getAmount());
-        assertEquals(readFinancialTransaction.getCurrency().toString(), writeFinancialTransaction.getCurrency());
-        assertEquals(Objects.requireNonNull(readFinancialTransaction).getTaxAmounts().size(), writeFinancialTransaction.getTaxAmounts().size());
-
+        assertEquals(readFinancialTransaction.getCurrency(), writeFinancialTransaction.getCurrency());
+        assertEquals(Objects.requireNonNull(readFinancialTransaction).getTaxAmountsList().size(), writeFinancialTransaction.getTaxAmountsList().size());
+        assertEquals(Objects.requireNonNull(readFinancialTransaction).getTransactionStatus(), writeFinancialTransaction.getTransactionStatus());
     }
 
     /**
