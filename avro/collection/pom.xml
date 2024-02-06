@@ -11,13 +11,6 @@
     <artifactId>avro-collection</artifactId>
     <version>1.0</version>
 
-    <properties>
-        <junit_version>5.10.1</junit_version>
-        <avro_version>1.11.3</avro_version>
-        <slf4j_simple_version>2.0.9</slf4j_simple_version>
-        <kafka_schema_registry_client_version>7.5.3</kafka_schema_registry_client_version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.avro</groupId>
@@ -40,7 +33,7 @@
         <!-- SLF4J Log4j Implementation -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <artifactId>slf4j-reload4j</artifactId>
             <version>${slf4j_simple_version}</version>
             <scope>test</scope>
         </dependency>
