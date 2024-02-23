@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package io.confluent.developer.proto.fsi.composition;
+
+message Customer {
+
+  // Unique identifier for the customer
+  string id = 1;
+
+  // First and last name of the customer
+  string first_name = 2;
+  string last_name = 3;
+
+  // Email address of the customer
+  string email = 4;
+
+  // Phone number of the customer
+  string phone_number = 5;
+}
