@@ -13,6 +13,7 @@
         <module>protobuf/collection</module>
         <module>protobuf/enumeration</module>
         <module>protobuf/composition</module>
+        <module>protobuf/alternative-field</module>
         <module>avro/simple-registration</module>
         <module>avro/collection</module>
         <module>avro/enumeration</module>
