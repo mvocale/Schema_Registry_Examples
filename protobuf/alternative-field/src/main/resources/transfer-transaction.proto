@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package io.confluent.developer.proto.fsi.alternative_field;
+
+message Transfer {
+
+  // Specific fields related to transfer transaction
+  double transfer_amount = 1;
+
+  string source_account = 2;
+
+  string destination_account = 3;
+
+  string source_account_name = 4;  // Optional
+
+  string destination_account_name = 5;  // Optional
+
+  string memo = 6;  // Optional
+
+}

@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "namespace": "io.confluent.developer.avro.fsi.alternative_field",
+  "name": "FinancialTransaction",
+  "fields": [
+    {
+      "name": "transaction_id",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "type": "long"
+    },
+    {
+      "name": "transaction_details", "type": [
+      "io.confluent.developer.avro.fsi.alternative_field.DepositTransaction",
+      "io.confluent.developer.avro.fsi.alternative_field.TransferTransaction",
+      "io.confluent.developer.avro.fsi.alternative_field.WithdrawalTransaction"
+    ]},
+    {
+      "name": "currency",
+      "type": "string"
+    }
+  ]
+}

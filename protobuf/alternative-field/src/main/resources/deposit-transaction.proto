@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package io.confluent.developer.proto.fsi.alternative_field;
+
+message Deposit {
+
+  // Specific fields related to deposit transaction
+  double deposit_amount = 1;
+
+  string description = 2;  // Optional
+
+  string reference_number = 3;  // Optional
+}

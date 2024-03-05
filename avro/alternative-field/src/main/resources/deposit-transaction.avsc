@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "namespace": "io.confluent.developer.avro.fsi.alternative_field",
+  "name": "DepositTransaction",
+  "fields": [
+    {
+      "name": "deposit_amount",
+      "type": "double"
+    },
+    {
+      "name": "description",
+      "type": "string"
+    },
+    {
+      "name": "reference_number",
+      "type": "string"
+    }
+  ]
+}
