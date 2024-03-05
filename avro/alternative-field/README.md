@@ -1,5 +1,5 @@
-# Protobuf Alternative Field Example
-This is an example where you read Protobuf schema from the local file system and register it on the target Schema Registry server.
+# Avro Alternative Field Example
+This is an example where you read Avro schema from the local file system and register it on the target Schema Registry server.
 This approach can be used in a continuous deployment pipeline to push schemas to a new environment.
 This example contains an FSI transaction record example with an alternative field attribute.
 
@@ -14,24 +14,24 @@ In case you already have a Confluent Cloud cluster please set the values of the 
 - _${api_secret}_
 
 ## Run the example
-To run the example register the Protobuf schemas, the main one, related to Financial Transaction, and the others
-related to "one of" transaction_details field, into the Schema registry executing the command:
+To run the example register the Avro schemas, the main one, related to Financial Transaction, and the others
+related to "union" transaction_details field, into the Schema registry executing the command:
 
 ```
 $  mvn compile schema-registry:register  
 ```
 
-![List of schemas](assets/images/protobuf-schema-registry.png)
+![List of schemas](assets/images/avro-schema-registry.png)
 
 You can also inspect the structure of the two schemas clicking on the subject name:
 
-![Financial_Transaction](assets/images/financial-transaction-protobuf.png)
+![Financial_Transaction](assets/images/financial-transaction-avro.png)
 
-![Deposit_Transaction](assets/images/deposit-transaction-protobuf.png)
+![Deposit_Transaction](assets/images/deposit-transaction-avro.png)
 
-![Transfer_Transaction](assets/images/transfer-transaction-protobuf.png)
+![Transfer_Transaction](assets/images/transfer-transaction-avro.png)
 
-![Withdrawal_Transaction](assets/images/withdrawal-transaction-protobuf.png)
+![Withdrawal_Transaction](assets/images/withdrawal-transaction-avro.png)
 
 ## Destroy environment
 In order to contain your cost you should remove all the built resources at the end of your test.
