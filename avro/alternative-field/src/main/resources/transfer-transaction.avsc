@@ -1,0 +1,31 @@
+{
+  "type": "record",
+  "namespace": "io.confluent.developer.avro.fsi.alternative_field",
+  "name": "TransferTransaction",
+  "fields": [
+    {
+      "name": "transfer_amount",
+      "type": "double"
+    },
+    {
+      "name": "source_account",
+      "type": "string"
+    },
+    {
+      "name": "destination_account",
+      "type": "string"
+    },
+    {
+      "name": "source_account_name",
+      "type": "string"
+    },
+    {
+      "name": "destination_account_name",
+      "type": "string"
+    },
+    {
+      "name": "memo",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package io.confluent.developer.proto.fsi.alternative_field;
+
+message Withdrawal {
+
+  // Specific fields related to withdrawal transaction
+  double withdrawal_amount = 1;
+
+  string reason = 2;  // Optional
+
+  double fee = 3;  // Optional
+
+}

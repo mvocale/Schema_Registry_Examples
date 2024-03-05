@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package io.confluent.developer.proto.fsi.alternative_field;
+
+import "deposit-transaction.proto";
+import "transfer-transaction.proto";
+import "withdrawal-transaction.proto";
+
+message FinancialTransaction {
+  // Unique transaction identifier
+  string transaction_id = 1;
+
+  // Timestamp of the transaction
+  int64 timestamp = 2;
+
+  // One of the following fields must be set
+  oneof transaction_details {
+    // Deposit information
+    Deposit deposit = 3;
+
+    // Transfer information
+    Transfer transfer = 4;
+
+    // Withdrawal information
+    Withdrawal withdrawal = 5;
+
+  }
+
+  // Currency code (e.g., 'USD', 'EUR', 'GBP')
+  string currency = 6;
+}
