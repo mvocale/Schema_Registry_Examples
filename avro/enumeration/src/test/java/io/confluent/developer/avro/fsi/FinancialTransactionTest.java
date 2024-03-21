@@ -37,7 +37,8 @@ public class FinancialTransactionTest {
     private static final String TOPIC = "transactions-avro";
 
     /**
-     * Tests the creation of a financial transaction with tax amounts related to a preloaded schema.
+     * Tests the creation of a financial transaction with enumeration values
+     * related to a preloaded schema.
      *
      * @throws IOException if there is an I/O error while loading properties
      */
