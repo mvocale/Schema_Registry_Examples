@@ -1,6 +1,5 @@
 package io.confluent.developer.avro.fsi;
 
-import com.github.javafaker.Faker;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
@@ -27,8 +26,10 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.time.Instant;
-import java.util.*;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import static java.nio.file.Files.newInputStream;
@@ -39,13 +40,12 @@ public class FinancialTransactionTest {
     private static final String TOPIC = "transactions-avro";
 
     /**
-     * Tests the creation of a financial transaction with composition of other objects
-     * related to a preloaded schema.
+     * Tests the creation of a financial transaction with default values related to a preloaded schema.
      *
      * @throws IOException if there is an I/O error while loading properties
      */
     @Test
-    public void testCreateTransactionWithTaxAmounts() throws IOException {
+    public void testCreateTransactionWithDefaultsValues() throws IOException {
 
         // Initialize Log4j logging
         BasicConfigurator.configure();
@@ -95,13 +95,11 @@ public class FinancialTransactionTest {
         }
 
         final FinancialTransaction writeFinancialTransaction;
-        final CustomerTransaction writeCustomer;
         try (KafkaProducer<String, FinancialTransaction> producer = new KafkaProducer<>(propsProducer)) {
-            long transactionTime = Instant.now().toEpochMilli();
-            writeCustomer = generateRandomCustomer();
-            writeFinancialTransaction = new FinancialTransaction(UUID.randomUUID().toString(), transactionTime, "deposit",
-                    generateRandomCurrencyValues(), "USD",
-                    writeCustomer);
+            // In order to use the default values provided in the AVRO schema I need to use the Builder approach and
+            // not the new FinancialTransaction constructor that set to null alla values, ignoring the one defined
+            // into the AVRO schema causing also exception.
+            writeFinancialTransaction = FinancialTransaction.newBuilder().setTransactionId(UUID.randomUUID().toString()).build();
             final ProducerRecord<String, FinancialTransaction> record = new ProducerRecord<>(TOPIC, writeFinancialTransaction.getTransactionId().toString(), writeFinancialTransaction);
             try {
                 Logger.getRootLogger().info("Record produced: " + record);
@@ -146,48 +144,12 @@ public class FinancialTransactionTest {
             }
         }
 
-        assertEquals(Objects.requireNonNull(readFinancialTransaction).getTransactionId().toString(), writeFinancialTransaction.getTransactionId());
-        assertEquals(readFinancialTransaction.getTimestamp(), writeFinancialTransaction.getTimestamp());
-        assertEquals(readFinancialTransaction.getTransactionType().toString(), writeFinancialTransaction.getTransactionType());
-        assertEquals(readFinancialTransaction.getAmount(), writeFinancialTransaction.getAmount());
-        assertEquals(readFinancialTransaction.getCurrency().toString(), writeFinancialTransaction.getCurrency());
-        assertEquals(Objects.requireNonNull(readFinancialTransaction).getCustomer(), writeFinancialTransaction.getCustomer());
-
+        // Verify the results with the default values
+        assertEquals(Objects.requireNonNull(readFinancialTransaction).getTransactionId().toString(), writeFinancialTransaction.getTransactionId().toString());
+        assertEquals(readFinancialTransaction.getTimestamp(), 1704063600);
+        assertEquals(readFinancialTransaction.getTransactionType().toString(), "deposit");
+        assertEquals(readFinancialTransaction.getAmount(), 0.0);
+        assertEquals(readFinancialTransaction.getCurrency().toString(), "EUR");
     }
 
-    /**
-     * Generates a random currency value between 0 and 100 USD.
-     *
-     * @return the random currency value rounded to the nearest integer
-     */
-    private double generateRandomCurrencyValues() {
-        Currency currency = Currency.getInstance("USD");
-        Random random = new Random();
-        double randomValue = 1 + (100 - 1) * random.nextDouble();
-        return Math.rint(randomValue * currency.getDefaultFractionDigits());
-    }
-
-    /**
-     * Generates a new {@link CustomerTransaction} object with random data using Faker library.
-     * <p>
-     * This method utilizes the Faker library to create realistic random data for customer attributes.
-     * It generates first and last names, email address based on the names, and a phone number.
-     * Finally, it builds and returns a new Customer object with the generated data.
-     *
-     * @return A new {@link CustomerTransaction} object with random data.
-     */
-    private CustomerTransaction generateRandomCustomer() {
-        Faker faker = new Faker();
-        String firstName = faker.name().firstName();
-        String lastName = faker.name().lastName();
-        String email = firstName + lastName + "@gmail.com";
-        String phoneNumber = faker.phoneNumber().phoneNumber();
-        return CustomerTransaction.newBuilder()
-                .setCustomerId(UUID.randomUUID().toString())
-                .setFirstName(firstName)
-                .setLastName(lastName)
-                .setEmail(email)
-                .setPhoneNumber(phoneNumber)
-                .build();
-    }
 }
