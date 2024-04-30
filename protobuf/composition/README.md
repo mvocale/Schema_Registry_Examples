@@ -29,6 +29,13 @@ You can also inspect the structure of the two schemas clicking on the subject na
 
 ![Financial_Transaction](assets/images/customer-transaction-protobuf.png)
 
+Now you can execute the unit test implemented into the FinancialTransactionTest class that will produce and consume an event,
+following the schema implemented and registered before, verifying that the event adheres to the schema.
+Do it executing the command:
+```
+$  mvn test  
+```
+
 ## Destroy environment
 In order to contain your cost you should remove all the built resources at the end of your test.
 
