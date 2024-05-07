@@ -6,9 +6,9 @@
         <groupId>io.confluent.developer.schema_registry.examples</groupId>
         <artifactId>schema-registry-examples</artifactId>
         <version>1.0.0</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../../../pom.xml</relativePath>
     </parent>
-    <artifactId>simple-protobuf-registration</artifactId>
+    <artifactId>maven-protobuf-registration</artifactId>
     <version>1.0</version>
 
     <dependencies>
@@ -32,7 +32,7 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>../../build-environment/src/main/resources/schema_registry_values.properties</file>
+                                <file>../../../build-environment/src/main/resources/schema_registry_values.properties</file>
                             </files>
                         </configuration>
                     </execution>

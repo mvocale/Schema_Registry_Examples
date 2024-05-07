@@ -1,6 +1,5 @@
-# Avro simple schema registration
-This is an example where you read Avro schema from the local file system and register them on the target Schema Registry server. 
-This approach can be used in a continuous deployment pipeline to push schemas to a new environment.
+# Avro CLI schema registration
+This is an example where you read Avro schema from the local file system and register them on the target Schema Registry server using Confluent CLI
 
 ## System requirements
 In order to execute the example implemented in this repository be sure to have created the Confluent environment 
@@ -13,12 +12,15 @@ In case you already have a Confluent Cloud cluster please set the values of the 
  - _${api_secret}_
 
 ## Run the example
-To run the example, registering the Avro schema into the Schema registry launch the command:
+To run the example, registering the Avro schema into the Schema registry, execute the file cli-avro-registration.sh:
 
 ```
-$  mvn compile schema-registry:register  
+$ cd src/main/resources
+$  ./cli-avro-registration.sh  
 ```
-The maven plugin will register the FinancialTransaction.avsc into the Schema Registry.
+This executable file contains che CLI command needed to register the schema into Confluent Cloud Schema Registry.
+
+You are now able to see the schema into the schemas list
 
 ![List of schemas](assets/images/avro-schema-registry.png)
 
