@@ -1,0 +1,1 @@
+confluent schema-registry schema create --subject transactions-protobuf-value --schema FinancialTransaction.proto --type protobuf

@@ -1,0 +1,1 @@
+confluent schema-registry schema create --subject transactions-avro-value --schema FinancialTransaction.avsc --type avro

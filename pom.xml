@@ -9,12 +9,12 @@
     <name>parent</name>
 
     <modules>
-        <module>protobuf/simple-registration</module>
+        <module>protobuf/registration/maven</module>
         <module>protobuf/collection</module>
         <module>protobuf/enumeration</module>
         <module>protobuf/composition</module>
         <module>protobuf/alternative-field</module>
-        <module>avro/simple-registration</module>
+        <module>avro/registration/maven</module>
         <module>avro/collection</module>
         <module>avro/enumeration</module>
         <module>avro/composition</module>
